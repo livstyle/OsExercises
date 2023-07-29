@@ -118,25 +118,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "cicv"
-version = "5.5.1"
-dependencies = [
- "argh",
- "assert_cmd",
- "console",
- "glob",
- "home",
- "indicatif",
- "notify",
- "predicates",
- "regex",
- "serde",
- "serde_json",
- "tokio",
- "toml",
-]
-
-[[package]]
 name = "console"
 version = "0.15.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -613,6 +594,25 @@ name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d626bb9dae77e28219937af045c257c28bfd3f69333c512553507f5f9798cb76"
+
+[[package]]
+name = "rustlings"
+version = "5.5.1"
+dependencies = [
+ "argh",
+ "assert_cmd",
+ "console",
+ "glob",
+ "home",
+ "indicatif",
+ "notify",
+ "predicates",
+ "regex",
+ "serde",
+ "serde_json",
+ "tokio",
+ "toml",
+]
 
 [[package]]
 name = "ryu"

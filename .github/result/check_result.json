@@ -8,8 +8,8 @@
   "user_name": null,
   "statistics": {
     "total_exercations": 1,
-    "total_succeeds": 0,
-    "total_failures": 1,
+    "total_succeeds": 1,
+    "total_failures": 0,
     "total_time": 0
   }
 }
