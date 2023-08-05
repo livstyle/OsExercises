@@ -31,8 +31,8 @@ jobs:
         rustup component add rust-src --toolchain stable-x86_64-unknown-linux-gnu
         rustup component add llvm-tools-preview
         cargo install cargo-binutils
-    - name: Run tests
-      run: cargo test --test cicv --verbose
+    - name: Run Verify
+      run: cargo install --path . && arceos cicvverify  # cargo test --test cicv --verbose
     - uses: yfblock/os-autograding@master
       id: autograding
       with:
