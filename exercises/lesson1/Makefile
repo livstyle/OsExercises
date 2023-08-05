@@ -24,7 +24,7 @@ $(OUT_ELF): FORCE
 		-Zbuild-std-features=compiler-builtins-mem \
 		--target riscv64gc-unknown-none-elf --release \
 		--features "$(STEP_FEATURES)" \
-		--manifest-path apps/$(STEP)/Cargo.toml -- \
+		--manifest-path $(BASE_DIR)/apps/$(STEP)/Cargo.toml -- \
 		-Clink-arg=-T../../libos/linker_riscv64.lds
 
 run: build justrun
