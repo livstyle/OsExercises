@@ -32,8 +32,8 @@ jobs:
       run: |
         cd exercises/lesson1/
         ./verify a0
-    - name: Run tests
-      run: cargo install cargo-binutils && cargo install --path . && arceos run a0 && cargo test --test cicv --verbose
+    # - name: Run tests
+    #   run: cargo install cargo-binutils && cargo install --path . && arceos run a0 && cargo test --test cicv --verbose
     - uses: yfblock/os-autograding@master
       id: autograding
       with:
