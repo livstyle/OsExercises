@@ -29,7 +29,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y qemu
     - name: Run tests
-      run: cargo install cargo-binutils && cargo install --path . && arceos run a1 && cargo test --test cicv --verbose
+      run: cargo install cargo-binutils && cargo install --path . && arceos run a0 && cargo test --test cicv --verbose
     - uses: yfblock/os-autograding@master
       id: autograding
       with:
