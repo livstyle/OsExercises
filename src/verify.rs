@@ -29,7 +29,7 @@ pub fn verify<'a>(
             Mode::Test => compile_and_test(exercise, RunMode::Interactive, verbose, success_hints),
             Mode::Compile => compile_and_run_interactively(exercise, success_hints),
             Mode::Clippy => compile_only(exercise, success_hints),
-            Mode::Arceos => compile_only(exercise, success_hints),
+            Mode::Arceos => arceos(exercise),
         };
         if !compile_result.unwrap_or(false) {
             return Err(exercise);
@@ -219,4 +219,38 @@ fn prompt_for_completion(exercise: &Exercise, prompt_output: Option<String>, suc
 
 fn separator() -> console::StyledObject<&'static str> {
     style("====================").bold()
+}
+
+
+fn arceos(exercise: &Exercise) -> Result<bool, ()>  {
+    let progress_bar = ProgressBar::new_spinner();
+    progress_bar.set_message(format!("Compiling {exercise}..."));
+    progress_bar.enable_steady_tick(100);
+
+    let compilation_result = exercise.compile();
+    match compilation_result {
+        Ok(compilation) => {
+            println!(" compilation.stdout:::::--->{}",  compilation.stdout);
+            if compilation.stdout.contains(&exercise.result) {
+                // compilation
+                Ok(prompt_for_completion(exercise, Some(exercise.result.clone()), false))
+            } else {
+                println!(
+                    "Compilation of {} failed!, Compiler error message:\n",
+                    exercise
+                );
+                Err(())
+            }
+        },
+        Err(output) => {
+            progress_bar.finish_and_clear();
+            println!(
+                "Compilation of {} failed!, Compiler error message:\n",
+                exercise
+            );
+            println!("{}", output.stderr);
+            Err(())
+        }
+    }
+    
 }

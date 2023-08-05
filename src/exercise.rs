@@ -1,6 +1,6 @@
 use regex::Regex;
 use serde::Deserialize;
-use std::env;
+use std::env::{self, current_dir};
 use std::fmt::{self, Display, Formatter};
 use std::fs::{self, remove_file, File};
 use std::io::Read;
@@ -55,6 +55,10 @@ pub struct Exercise {
     pub mode: Mode,
     // The hint text associated with the exercise
     pub hint: String,
+    
+    pub result: String,
+
+    pub dirname: String,
 }
 
 // An enum to track of the state of an Exercise.
@@ -165,19 +169,27 @@ path = "{}.rs""#,
                     .output()
             },
             Mode::Arceos => {
-                // let cmd = Command::new("make")
-                // .args(&["-f=/Users/jiangkun/codes/rust/arceos/Makefile A=/Users/jiangkun/codes/rust/arceos/apps/helloworld ARCH=aarch64 LOG=info NET=N SMP=4 run"])
-                
-                // Command::new("ls")
-                // .arg("-c")
-                // .current_dir("/Users/jiangkun/codes/rust/arceos")
-                // .arg("make A=apps/helloworld ARCH=aarch64 LOG=info NET=N SMP=4 run")
-                // .output()
+                let path: PathBuf = self.path.clone();
+                let dir_path = current_dir().unwrap();
+                let dir_path = dir_path.join(path);
+
+                // let mut sh = String::from("make clean && make STEP=");
+                // sh.push_str(&self.name);
+                // sh.push_str(" BASE_DIR=");
+                // sh.push_str(dir_path.to_str().unwrap());
+                // sh.push_str(" run | tee /tmp/");
+                // sh.push_str(&self.name);
+                // println!("sh: ===>{}", sh);
+
+                let mut verify_sh = String::from("./verify ");
+                verify_sh.push_str(&self.name);
+
+                // println!("verify_sh: ===>{}", verify_sh);
 
                 Command::new("sh")
+                .current_dir(dir_path)
                 .arg("-c")
-                .current_dir("/Users/jiangkun/codes/rust/arceos")
-                .args(&["qemu-system-aarch64 -m 128M -smp 4 -cpu cortex-a72 -machine virt -kernel /Users/jiangkun/codes/rust/arceos/apps/helloworld/helloworld_qemu-virt-aarch64.bin -nographic"])
+                .arg(verify_sh)
                 .output()
             }
         }
@@ -221,8 +233,15 @@ path = "{}.rs""#,
     }
 
     pub fn state(&self) -> State {
+        let file_path: PathBuf = std::env::current_dir().unwrap();
+        let mut file_path = file_path.join(self.path.clone());
+        println!("file_path1111: {:#?}", file_path);
+        file_path.push("apps");
+        file_path.push(&self.dirname);
+        file_path.push("src/main.rs");
+
         let mut source_file =
-            File::open(&self.path).expect("We were unable to open the exercise file!");
+            File::open(file_path).expect("We were unable to open the exercise file!");
 
         let source = {
             let mut s = String::new();
@@ -296,6 +315,8 @@ mod test {
             path: PathBuf::from("tests/fixture/state/pending_exercise.rs"),
             mode: Mode::Compile,
             hint: String::from(""),
+            result: String::new(),
+            dirname: String::new(),
         };
         let compiled = exercise.compile().unwrap();
         drop(compiled);
@@ -309,6 +330,8 @@ mod test {
             path: PathBuf::from("tests/fixture/state/pending_exercise.rs"),
             mode: Mode::Compile,
             hint: String::new(),
+            result: String::new(),
+            dirname: String::new(),
         };
 
         let state = exercise.state();
@@ -350,6 +373,8 @@ mod test {
             path: PathBuf::from("tests/fixture/state/finished_exercise.rs"),
             mode: Mode::Compile,
             hint: String::new(),
+            result: String::new(),
+            dirname: String::new(),
         };
 
         assert_eq!(exercise.state(), State::Done);
@@ -362,6 +387,8 @@ mod test {
             path: PathBuf::from("tests/fixture/success/testSuccess.rs"),
             mode: Mode::Test,
             hint: String::new(),
+            result: String::new(),
+            dirname: String::new(),
         };
         let out = exercise.compile().unwrap().run().unwrap();
         assert!(out.stdout.contains("THIS TEST TOO SHALL PASS"));

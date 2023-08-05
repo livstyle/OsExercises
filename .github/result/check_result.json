@@ -1,15 +1,19 @@
 {
   "exercises": [
     {
-      "name": "arceos1",
+      "name": "a0",
+      "result": false
+    },
+    {
+      "name": "a1",
       "result": false
     }
   ],
   "user_name": null,
   "statistics": {
-    "total_exercations": 1,
-    "total_succeeds": 1,
-    "total_failures": 0,
-    "total_time": 0
+    "total_exercations": 2,
+    "total_succeeds": 0,
+    "total_failures": 2,
+    "total_time": 11
   }
 }

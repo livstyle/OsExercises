@@ -80,14 +80,23 @@ fn arceos(exercise: &Exercise) -> Result<(), ()> {
     progress_bar.enable_steady_tick(100);
 
     let compilation_result = exercise.compile();
-    let compilation = match compilation_result {
+    let result = match compilation_result {
         Ok(compilation) => {
             println!(" compilation.stdout:::::--->{}",  compilation.stdout);
-            compilation
+            if compilation.stdout.contains(&exercise.result) {
+                // compilation
+                return Ok(());
+            } else {
+                println!(
+                    "Compilation of {} failed!, Compiler error message:\n",
+                    exercise
+                );
+                Err(())
+            }
         },
         Err(output) => {
             progress_bar.finish_and_clear();
-            warn!(
+            println!(
                 "Compilation of {} failed!, Compiler error message:\n",
                 exercise
             );
@@ -95,5 +104,5 @@ fn arceos(exercise: &Exercise) -> Result<(), ()> {
             return Err(());
         }
     };
-    Ok(())
+    result
 }

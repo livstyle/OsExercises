@@ -468,6 +468,7 @@ fn watch(
 
     let to_owned_hint = |t: &Exercise| t.hint.to_owned();
     let failed_exercise_hint = match verify(
+        // let failed_exercise_hint = match ar(
         exercises.iter(),
         (0, exercises.len()),
         verbose,
