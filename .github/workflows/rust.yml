@@ -27,7 +27,7 @@ jobs:
     - name: Install QEMU
       run: |
         sudo apt-get update
-        sudo apt-get install -y qemu
+        sudo apt-get install -y qemu qemu-system
     - name: Run tests
       run: cargo install cargo-binutils && cargo install --path . && arceos run a0 && cargo test --test cicv --verbose
     - uses: yfblock/os-autograding@master
